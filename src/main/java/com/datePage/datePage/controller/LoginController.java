@@ -1,17 +1,13 @@
 package com.datePage.datePage.controller;
 
-import com.datePage.datePage.domain.Post;
 import com.datePage.datePage.request.PostCreate;
+import com.datePage.datePage.request.domain.Post;
 import com.datePage.datePage.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -27,8 +23,14 @@ public class LoginController {
 
     //@RequestMapping(method = RequestMethod.GET, path = "/v1/posts")
     @PostMapping("/posts")
-    public Map<String, String> post(@RequestBody @Valid PostCreate request) {
-        loginService.write(request);
-        return Map.of();
+    public Map post(@RequestBody @Valid PostCreate request) {
+        //post- > 200, 201
+        //Case1. 저장한 데이터 Entity -> response로 응답하기
+        //Case2. 저장한 데이터 primary_id -> response로 응답하기
+        //Case3. 응답 필요 없음 -> response로 응답하기
+
+        //Bad Case:서버에서 반드시 할겁니다->
+        String id = loginService.write(request);
+        return Map.of("id",  id);
     }
 }
