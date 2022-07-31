@@ -6,6 +6,7 @@ import com.datePage.datePage.request.PostCreate;
 import com.datePage.datePage.request.WriteCreate;
 import com.datePage.datePage.request.domain.Post;
 import com.datePage.datePage.request.domain.Write;
+import com.datePage.datePage.response.WriteResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +34,20 @@ public class WriteService {
         this.writeRepository = writeRepository;
     }
 
-    public Write get(Long id) {
+    public WriteResponse get(Long id) {
         Write write =   writeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글립니다"));
 
-        /*//값이 있으면
-        if (write.isPresent()) {
-            return write.get();
-        }*/
+         WriteResponse writeResponse = WriteResponse.builder()
+                .write_id(write.getWrite_id())
+                .title(write.getTitle())
+                .content(write.getContent())
+                .build();
 
-        return write;
+        return writeResponse;
     }
+
+
+
+
 }

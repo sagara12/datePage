@@ -3,6 +3,7 @@ package com.datePage.datePage.controller;
 import com.datePage.datePage.request.PostCreate;
 import com.datePage.datePage.request.WriteCreate;
 import com.datePage.datePage.request.domain.Write;
+import com.datePage.datePage.response.WriteResponse;
 import com.datePage.datePage.service.WriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +39,9 @@ public class WriteController {
      */
 
     @GetMapping("/write/{writeId}")
-    public Write get(@PathVariable(name = "writeId") Long id ) {
-        Write write = writeService.get(id);
-        return write;
+    public WriteResponse get(@PathVariable(name = "writeId") Long id ) {
+        WriteResponse writeResponse = writeService.get(id);
+        return writeResponse;
     }
+
 }

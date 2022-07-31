@@ -5,6 +5,7 @@ import com.datePage.datePage.request.PostCreate;
 import com.datePage.datePage.request.WriteCreate;
 import com.datePage.datePage.request.domain.Post;
 import com.datePage.datePage.request.domain.Write;
+import com.datePage.datePage.response.WriteResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,16 +65,20 @@ class WriteServiceTest {
         writeRepository.save(requestWrite);
 
 
+        // 클라언트 요구사항
+            // json응답에서 title값 길이를 최대 10글자로 해주세요.
+
+
         Long writeId = 1L;
 
         //when
-        Write write = writeService.get(requestWrite.getWrite_id());
+        WriteResponse writeResponse  = writeService.get(requestWrite.getWrite_id());
 
         //then
-        assertNotNull(write);
+        assertNotNull(writeResponse);
         assertEquals(1L, writeRepository.count());
-        assertEquals("title", write.getTitle());
-        assertEquals("content", write.getContent());
+        assertEquals("title", writeResponse.getTitle());
+        assertEquals("content", writeResponse.getContent());
 
     }
 }

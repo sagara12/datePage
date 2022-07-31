@@ -27,4 +27,5 @@ public class Write {
         this.title = title;
         this.content = content;
     }
+
 }

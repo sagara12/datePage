@@ -91,7 +91,7 @@ class WriteControllerTest {
     void test3() throws Exception {
         //given
         WriteCreate request = WriteCreate.builder()
-                .content("내용 입니다")
+                .title("제목 입니다")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -114,7 +114,7 @@ class WriteControllerTest {
     void test4() throws Exception {
         //given
         Write write = Write.builder()
-                    .title("title1")
+                    .title("123456789012345")
                     .content("content1")
                     .build();
 
@@ -126,7 +126,7 @@ class WriteControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.write_id").value(write.getWrite_id()))
-                .andExpect(jsonPath("$.title").value("title1"))
+                .andExpect(jsonPath("$.title").value("1234567890"))
                 .andExpect(jsonPath("$.content").value("content1"))
                 .andDo(MockMvcResultHandlers.print());
     }
