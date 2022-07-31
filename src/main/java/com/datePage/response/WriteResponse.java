@@ -1,8 +1,8 @@
-package com.datePage.datePage.response;
+package com.datePage.response;
 
+import com.datePage.request.domain.Write;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  *
@@ -20,6 +20,16 @@ public class WriteResponse {
     /*public String getTitle() {
         return this.title.substring(0,10);
     }*/
+
+    //생성자 오버로딩
+    public WriteResponse (Write write) {
+
+        this.write_id = write.getWrite_id();
+        this.title = write.getTitle();
+        this.content  = write.getContent();
+
+    }
+
 
     @Builder
     public WriteResponse(Long write_id, String title, String content) {

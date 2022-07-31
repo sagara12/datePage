@@ -1,15 +1,14 @@
-package com.datePage.datePage.controller;
+package com.datePage.controller;
 
-import com.datePage.datePage.request.PostCreate;
-import com.datePage.datePage.request.WriteCreate;
-import com.datePage.datePage.request.domain.Write;
-import com.datePage.datePage.response.WriteResponse;
-import com.datePage.datePage.service.WriteService;
+import com.datePage.request.WriteCreate;
+import com.datePage.response.WriteResponse;
+import com.datePage.service.WriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -44,4 +43,13 @@ public class WriteController {
         return writeResponse;
     }
 
+
+    //조회 API
+    //여러개의 글을 조회 하는 API
+    // /write
+
+    @GetMapping("/write")
+    public List<WriteResponse> getList() {
+        return writeService.getList();
+    }
 }

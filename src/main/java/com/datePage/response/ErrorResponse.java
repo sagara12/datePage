@@ -1,4 +1,4 @@
-package com.datePage.datePage.response;
+package com.datePage.response;
 
 import lombok.Builder;
 import lombok.Data;

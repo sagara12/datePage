@@ -1,4 +1,4 @@
-package com.datePage.datePage.request;
+package com.datePage.request;
 
 import lombok.*;
 

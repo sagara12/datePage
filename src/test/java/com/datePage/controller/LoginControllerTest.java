@@ -1,8 +1,8 @@
-package com.datePage.datePage.controller;
+package com.datePage.controller;
 
-import com.datePage.datePage.request.domain.Post;
-import com.datePage.datePage.repository.PostRepository;
-import com.datePage.datePage.request.PostCreate;
+import com.datePage.request.domain.Post;
+import com.datePage.repository.PostRepository;
+import com.datePage.request.PostCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

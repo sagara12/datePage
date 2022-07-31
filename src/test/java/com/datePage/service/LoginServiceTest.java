@@ -1,16 +1,12 @@
-package com.datePage.datePage.service;
+package com.datePage.service;
 
-import com.datePage.datePage.repository.PostRepository;
-import com.datePage.datePage.repository.WriteRepository;
-import com.datePage.datePage.request.domain.Post;
-import com.datePage.datePage.request.domain.Write;
+import com.datePage.repository.PostRepository;
+import com.datePage.request.domain.Post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 

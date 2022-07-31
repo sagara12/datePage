@@ -1,8 +1,7 @@
-package com.datePage.datePage.controller;
+package com.datePage.controller;
 
-import com.datePage.datePage.request.PostCreate;
-import com.datePage.datePage.request.domain.Post;
-import com.datePage.datePage.service.LoginService;
+import com.datePage.request.PostCreate;
+import com.datePage.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

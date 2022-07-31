@@ -1,13 +1,10 @@
-package com.datePage.datePage.service;
+package com.datePage.service;
 
-import com.datePage.datePage.request.domain.Post;
-import com.datePage.datePage.repository.PostRepository;
-import com.datePage.datePage.request.PostCreate;
-import com.datePage.datePage.request.domain.Write;
+import com.datePage.repository.PostRepository;
+import com.datePage.request.PostCreate;
+import com.datePage.request.domain.Post;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service

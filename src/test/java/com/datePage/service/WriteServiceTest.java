@@ -1,17 +1,17 @@
-package com.datePage.datePage.service;
+package com.datePage.service;
 
-import com.datePage.datePage.repository.WriteRepository;
-import com.datePage.datePage.request.PostCreate;
-import com.datePage.datePage.request.WriteCreate;
-import com.datePage.datePage.request.domain.Post;
-import com.datePage.datePage.request.domain.Write;
-import com.datePage.datePage.response.WriteResponse;
+import com.datePage.repository.WriteRepository;
+import com.datePage.request.WriteCreate;
+import com.datePage.request.domain.Write;
+import com.datePage.response.WriteResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,6 +79,33 @@ class WriteServiceTest {
         assertEquals(1L, writeRepository.count());
         assertEquals("title", writeResponse.getTitle());
         assertEquals("content", writeResponse.getContent());
+
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test3() {
+        //given
+        writeRepository.saveAll(List.of(
+
+                Write.builder()
+                .title("title1")
+                .content("content1")
+                .build(),
+
+                Write.builder()
+                        .title("title2")
+                        .content("content2")
+                        .build()
+
+        ));
+
+        //when
+        List<WriteResponse> writes = writeService.getList();
+
+        //then
+        assertEquals(2L, writes.size());
+
 
     }
 }

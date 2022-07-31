@@ -1,11 +1,10 @@
-package com.datePage.datePage.controller;
+package com.datePage.controller;
 
-import com.datePage.datePage.repository.PostRepository;
-import com.datePage.datePage.repository.WriteRepository;
-import com.datePage.datePage.request.PostCreate;
-import com.datePage.datePage.request.WriteCreate;
-import com.datePage.datePage.request.domain.Write;
+import com.datePage.repository.WriteRepository;
+import com.datePage.request.WriteCreate;
+import com.datePage.request.domain.Write;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,10 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,10 +35,10 @@ class WriteControllerTest {
     @Autowired
     private WriteRepository writeRepository;
 
-   /* @BeforeEach
+    @BeforeEach
     void clean() {
         writeRepository.deleteAll();
-    }*/
+    }
 
     @Test
     @DisplayName("/write 성공 했습니다.")
@@ -131,6 +128,42 @@ class WriteControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    @DisplayName("글 여럭개 조회")
+    void test5() throws Exception {
+        //given
+        Write write1 = Write.builder()
+                .title("title1")
+                .content("content1")
+                .build();
+
+        writeRepository.save(write1);
+
+        Write write2 = Write.builder()
+                .title("title2")
+                .content("content2")
+                .build();
+
+
+        writeRepository.save(write2);
+
+        //expected
+        mockMvc.perform(get("/write")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                /**
+                 * {[id :... ,title:...., content:.....], [id :... ,title:...., content:.....]}
+                 */
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(2)))
+                .andExpect(jsonPath("$[0].write_id").value(write1.getWrite_id()))
+                .andExpect(jsonPath("$[0].title").value("title1"))
+                .andExpect(jsonPath("$[0].content").value("content1"))
+                .andExpect(jsonPath("$[1].write_id").value(write1.getWrite_id()))
+                .andExpect(jsonPath("$[1].title").value("title2"))
+                .andExpect(jsonPath("$[1].content").value("content2"))
+                .andDo(MockMvcResultHandlers.print());
+    }
 
 
 }

@@ -1,11 +1,11 @@
-package com.datePage.datePage.request.domain;
+package com.datePage.request.domain;
 
-import com.datePage.datePage.request.PostCreate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -16,8 +16,10 @@ import javax.persistence.Id;
 public class Post {
 
     @Id
+    @Column(name = "private_id")
     private String id;
 
+    @Column(name = "private_password")
     private String password;
 
     @Builder

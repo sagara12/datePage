@@ -1,16 +1,14 @@
-package com.datePage.datePage.service;
+package com.datePage.service;
 
-import com.datePage.datePage.repository.PostRepository;
-import com.datePage.datePage.repository.WriteRepository;
-import com.datePage.datePage.request.PostCreate;
-import com.datePage.datePage.request.WriteCreate;
-import com.datePage.datePage.request.domain.Post;
-import com.datePage.datePage.request.domain.Write;
-import com.datePage.datePage.response.WriteResponse;
+import com.datePage.repository.WriteRepository;
+import com.datePage.request.WriteCreate;
+import com.datePage.request.domain.Write;
+import com.datePage.response.WriteResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -48,6 +46,10 @@ public class WriteService {
     }
 
 
-
-
+    public List<WriteResponse> getList() {
+        return writeRepository.findAll().stream()
+                .map(write -> new WriteResponse(write)
+                 )
+                .collect(Collectors.toList());
+    }
 }
