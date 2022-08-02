@@ -132,17 +132,17 @@ class WriteControllerTest {
     @DisplayName("글 여럭개 조회")
     void test5() throws Exception {
         //given
-        Write write1 = Write.builder()
+        Write write1 = writeRepository.save(Write.builder()
                 .title("title1")
                 .content("content1")
-                .build();
+                .build());
 
         writeRepository.save(write1);
 
-        Write write2 = Write.builder()
+        Write write2 = writeRepository.save(Write.builder()
                 .title("title2")
                 .content("content2")
-                .build();
+                .build());
 
 
         writeRepository.save(write2);
@@ -159,7 +159,7 @@ class WriteControllerTest {
                 .andExpect(jsonPath("$[0].write_id").value(write1.getWrite_id()))
                 .andExpect(jsonPath("$[0].title").value("title1"))
                 .andExpect(jsonPath("$[0].content").value("content1"))
-                .andExpect(jsonPath("$[1].write_id").value(write1.getWrite_id()))
+                .andExpect(jsonPath("$[1].write_id").value(write2.getWrite_id()))
                 .andExpect(jsonPath("$[1].title").value("title2"))
                 .andExpect(jsonPath("$[1].content").value("content2"))
                 .andDo(MockMvcResultHandlers.print());
