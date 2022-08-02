@@ -5,6 +5,13 @@ spring:
       enabled: true
       path: /h2-console
 
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true # 페이지를 0부터 아니라 1부터 시작하게 해주는 부분
+        default-page-size: 5 # 페이지를 몇개 씩 보여주는 설정 하는 부분
+
   datasource:
     url: jdbc:h2:mem:datePage # test 부분을 자신이 원하는 것으로 바꾸시면 됩니다.
     username: sa # username과 password는 자신의 설정에 맞게

@@ -10,18 +10,16 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
-@Table(name = "Document_Write")
 public class Write {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "write_number")
-    private Long write_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long writeId;
 
     @Column(name = "write_title")
     private String title;
 
-    @Column(name = "write_content")
+    @Lob
     private String content;
 
     @Builder

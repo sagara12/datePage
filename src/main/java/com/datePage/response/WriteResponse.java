@@ -24,7 +24,7 @@ public class WriteResponse {
     //생성자 오버로딩
     public WriteResponse (Write write) {
 
-        this.write_id = write.getWrite_id();
+        this.write_id = write.getWriteId();
         this.title = write.getTitle();
         this.content  = write.getContent();
 

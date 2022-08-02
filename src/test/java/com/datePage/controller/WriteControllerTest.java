@@ -5,6 +5,7 @@ import com.datePage.request.WriteCreate;
 import com.datePage.request.domain.Write;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -118,11 +123,11 @@ class WriteControllerTest {
         writeRepository.save(write);
 
         //expected
-        mockMvc.perform(get("/write/{writeId}", write.getWrite_id())
+        mockMvc.perform(get("/write/{writeIndex}", write.getWriteId())
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.write_id").value(write.getWrite_id()))
+                .andExpect(jsonPath("$.write_id").value(write.getWriteId()))
                 .andExpect(jsonPath("$.title").value("1234567890"))
                 .andExpect(jsonPath("$.content").value("content1"))
                 .andDo(MockMvcResultHandlers.print());
@@ -132,36 +137,28 @@ class WriteControllerTest {
     @DisplayName("글 여럭개 조회")
     void test5() throws Exception {
         //given
-        Write write1 = writeRepository.save(Write.builder()
-                .title("title1")
-                .content("content1")
-                .build());
+        //given
+        List<Write> requestWrite = IntStream.range(1, 31)
+                .mapToObj( i -> {
+                    return Write.builder()
+                            .title("글 제목 " + i)
+                            .content("글 내용 " + i)
+                            .build();
+                })
+                .collect(Collectors.toList());
 
-        writeRepository.save(write1);
-
-        Write write2 = writeRepository.save(Write.builder()
-                .title("title2")
-                .content("content2")
-                .build());
-
-
-        writeRepository.save(write2);
+        writeRepository.saveAll(requestWrite);
 
         //expected
-        mockMvc.perform(get("/write")
+
+        mockMvc.perform(get("/write?page=1&sort=writeId,desc") // /write?page=1&sort=writeId,desc&size=5
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                /**
-                 * {[id :... ,title:...., content:.....], [id :... ,title:...., content:.....]}
-                 */
+                .andExpect(jsonPath("$.length()", Is.is(5)))
+                .andExpect(jsonPath("$.[0]write_id").value(30))
+                .andExpect(jsonPath("$.[0]title").value("글 제목 30"))
+                .andExpect(jsonPath("$.[0]content").value("글 내용 30"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(2)))
-                .andExpect(jsonPath("$[0].write_id").value(write1.getWrite_id()))
-                .andExpect(jsonPath("$[0].title").value("title1"))
-                .andExpect(jsonPath("$[0].content").value("content1"))
-                .andExpect(jsonPath("$[1].write_id").value(write2.getWrite_id()))
-                .andExpect(jsonPath("$[1].title").value("title2"))
-                .andExpect(jsonPath("$[1].content").value("content2"))
                 .andDo(MockMvcResultHandlers.print());
     }
 

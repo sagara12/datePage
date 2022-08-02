@@ -5,6 +5,9 @@ import com.datePage.request.WriteCreate;
 import com.datePage.request.domain.Write;
 import com.datePage.response.WriteResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public class WriteService {
                 .build();
 
         writeRepository.save(write);
-        return write.getWrite_id();
+        return write.getWriteId();
 
     }
 
@@ -37,7 +40,7 @@ public class WriteService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글립니다"));
 
          WriteResponse writeResponse = WriteResponse.builder()
-                .write_id(write.getWrite_id())
+                .write_id(write.getWriteId())
                 .title(write.getTitle())
                 .content(write.getContent())
                 .build();
@@ -46,8 +49,9 @@ public class WriteService {
     }
 
 
-    public List<WriteResponse> getList() {
-        return writeRepository.findAll().stream()
+    public List<WriteResponse> getList(Pageable pageable) {
+        //Pageable pageable = PageRequest.of(page, 5, Sort.Direction.DESC, "writeId");
+        return writeRepository.findAll(pageable).stream()
                 .map(write -> new WriteResponse(write)
                  )
                 .collect(Collectors.toList());

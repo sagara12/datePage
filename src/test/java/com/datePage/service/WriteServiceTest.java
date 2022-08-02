@@ -10,8 +10,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,7 +77,7 @@ class WriteServiceTest {
         Long writeId = 1L;
 
         //when
-        WriteResponse writeResponse  = writeService.get(requestWrite.getWrite_id());
+        WriteResponse writeResponse  = writeService.get(requestWrite.getWriteId());
 
         //then
         assertNotNull(writeResponse);
@@ -82,29 +87,33 @@ class WriteServiceTest {
 
     }
 
+    //글이 너무 많은 경우에 -> 비용이 너무 많이 든다
+
+
     @Test
-    @DisplayName("글 여러개 조회")
+    @DisplayName("글 1페이지 조회")
     void test3() {
         //given
-        writeRepository.saveAll(List.of(
+        List<Write> requestWrite = IntStream.range(1, 31)
+                        .mapToObj( i -> {
+                            return Write.builder()
+                                    .title("글 제목 " + i)
+                                    .content("글 내용 " + i)
+                                    .build();
+                        })
+                                .collect(Collectors.toList());
 
-                Write.builder()
-                .title("title1")
-                .content("content1")
-                .build(),
+        writeRepository.saveAll(requestWrite);
 
-                Write.builder()
-                        .title("title2")
-                        .content("content2")
-                        .build()
-
-        ));
+        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "writeId");
 
         //when
-        List<WriteResponse> writes = writeService.getList();
+        List<WriteResponse> writes = writeService.getList(pageable);
 
         //then
-        assertEquals(2L, writes.size());
+        assertEquals(5L, writes.size());
+        assertEquals("글 제목 30" , writes.get(0).getTitle());
+        assertEquals("글 제목 26" , writes.get(4).getTitle());
 
 
     }

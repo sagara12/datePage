@@ -5,6 +5,8 @@ import com.datePage.response.WriteResponse;
 import com.datePage.service.WriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,7 +51,7 @@ public class WriteController {
     // /write
 
     @GetMapping("/write")
-    public List<WriteResponse> getList() {
-        return writeService.getList();
+    public List<WriteResponse> getList(Pageable pageable) {
+        return writeService.getList(pageable);
     }
 }
