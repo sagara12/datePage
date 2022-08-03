@@ -1,11 +1,13 @@
 package com.datePage.controller;
 
+import com.datePage.repository.DataBaseCleaner;
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
 import com.datePage.request.domain.Write;
+import com.datePage.service.DataCleanUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -20,8 +23,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,10 +44,18 @@ class WriteControllerTest {
     @Autowired
     private WriteRepository writeRepository;
 
+    @Autowired
+    private DataBaseCleaner dataBaseCleaner;
+
+    @Autowired
+    private DataCleanUp dataCleanUp;
+
     @BeforeEach
     void clean() {
         writeRepository.deleteAll();
+        dataCleanUp.execute();
     }
+
 
     @Test
     @DisplayName("/write 성공 했습니다.")
@@ -70,6 +82,8 @@ class WriteControllerTest {
     @Test
     @DisplayName("/write 요청시 title값은 필수다.")
     void test2() throws Exception {
+        //
+
         //given
         WriteCreate request = WriteCreate.builder()
                 .content("내용 입니다")
@@ -127,16 +141,17 @@ class WriteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.write_id").value(write.getWriteId()))
+                .andExpect(jsonPath("$.writeId").value(write.getWriteId()))
                 .andExpect(jsonPath("$.title").value("1234567890"))
                 .andExpect(jsonPath("$.content").value("content1"))
                 .andDo(MockMvcResultHandlers.print());
+
     }
 
     @Test
     @DisplayName("글 여러개 조회 & 페이징 처리")
     void test5() throws Exception {
-        //given
+
         //given
         List<Write> requestWrite = IntStream.range(1, 31)
                 .mapToObj( i -> {
@@ -149,17 +164,20 @@ class WriteControllerTest {
 
         writeRepository.saveAll(requestWrite);
 
+
         //expected
 
-        mockMvc.perform(get("/write?page=1&size=10") // /write?page=1&sort=writeId,desc&size=5
+        mockMvc.perform(get("/writes?page=1&size=10") // /write?page=1&sort=writeId,desc&size=5
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(jsonPath("$.length()", Is.is(10)))
-                .andExpect(jsonPath("$.[0]write_id").value(30))
+                .andExpect(jsonPath("$.[0]writeId").value(30))
                 .andExpect(jsonPath("$.[0]title").value("글 제목 30"))
                 .andExpect(jsonPath("$.[0]content").value("글 내용 30"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+
+        dataBaseCleaner.cleanWriteDBDataBase();
     }
 
 

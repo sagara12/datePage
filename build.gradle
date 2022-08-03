@@ -39,9 +39,14 @@ dependencies {
 	annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa") // querydsl JPAAnnotationProcessor 사용 지정
 	annotationProcessor("jakarta.persistence:jakarta.persistence-api") // java.lang.NoClassDefFoundError(javax.annotation.Entity) 발생 대응
 	annotationProcessor("jakarta.annotation:jakarta.annotation-api") // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
+
+	//Guava: Google Core Libraries For Java
+	implementation group: 'com.google.guava', name: 'guava', version: '11.0.2'
 }
 
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+

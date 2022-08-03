@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class WriteResponse {
 
-    private Long write_id;
+    private Long writeId;
 
     private String title;
 
@@ -24,7 +24,7 @@ public class WriteResponse {
     //생성자 오버로딩
     public WriteResponse (Write write) {
 
-        this.write_id = write.getWriteId();
+        this.writeId = write.getWriteId();
         this.title = write.getTitle();
         this.content  = write.getContent();
 
@@ -32,8 +32,8 @@ public class WriteResponse {
 
 
     @Builder
-    public WriteResponse(Long write_id, String title, String content) {
-        this.write_id = write_id;
+    public WriteResponse(Long writeId, String title, String content) {
+        this.writeId = writeId;
         this.title = title.substring(0,Math.min(title.length(), 10));
         this.content = content;
     }

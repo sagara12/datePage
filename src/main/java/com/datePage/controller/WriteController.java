@@ -57,7 +57,7 @@ public class WriteController {
         return writeService.getList(pageable);
     }*/
 
-    @GetMapping("/write")
+    @GetMapping("/writes")
     public List<WriteResponse> getList(@ModelAttribute WriteSearch writeSearch) {
         return writeService.getList(writeSearch);
     }

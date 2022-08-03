@@ -13,7 +13,8 @@ import javax.persistence.*;
 public class Write {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Long writeId;
 
     @Column(name = "write_title")
