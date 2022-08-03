@@ -2,6 +2,7 @@ package com.datePage.service;
 
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteSearch;
 import com.datePage.request.domain.Write;
 import com.datePage.response.WriteResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +50,22 @@ public class WriteService {
     }
 
 
-    public List<WriteResponse> getList(Pageable pageable) {
+    /*public List<WriteResponse> getList(Pageable pageable) {
         //Pageable pageable = PageRequest.of(page, 5, Sort.Direction.DESC, "writeId");
-        return writeRepository.findAll(pageable).stream()
+
+        //페이징 처리1
+        *//* return writeRepository.findAll(pageable).stream()
                 .map(write -> new WriteResponse(write)
                  )
+                .collect(Collectors.toList());*//*
+    }*/
+
+    public List<WriteResponse> getList(WriteSearch writeSearch) {
+        //Pageable pageable = PageRequest.of(page, 5, Sort.Direction.DESC, "writeId");
+
+        return writeRepository.getList(writeSearch).stream()
+                .map(write -> new WriteResponse(write)
+                )
                 .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package com.datePage.controller;
 
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteSearch;
 import com.datePage.response.WriteResponse;
 import com.datePage.service.WriteService;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +51,14 @@ public class WriteController {
     //여러개의 글을 조회 하는 API
     // /write
 
-    @GetMapping("/write")
+    // 페이징 처리 1
+   /* @GetMapping("/write")
     public List<WriteResponse> getList(Pageable pageable) {
         return writeService.getList(pageable);
+    }*/
+
+    @GetMapping("/write")
+    public List<WriteResponse> getList(@ModelAttribute WriteSearch writeSearch) {
+        return writeService.getList(writeSearch);
     }
 }

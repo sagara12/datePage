@@ -2,6 +2,7 @@ package com.datePage.service;
 
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteSearch;
 import com.datePage.request.domain.Write;
 import com.datePage.response.WriteResponse;
 import org.junit.jupiter.api.Assertions;
@@ -94,7 +95,7 @@ class WriteServiceTest {
     @DisplayName("글 1페이지 조회")
     void test3() {
         //given
-        List<Write> requestWrite = IntStream.range(1, 31)
+        List<Write> requestWrite = IntStream.range(0, 20)
                         .mapToObj( i -> {
                             return Write.builder()
                                     .title("글 제목 " + i)
@@ -105,16 +106,21 @@ class WriteServiceTest {
 
         writeRepository.saveAll(requestWrite);
 
-        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "writeId");
+        //페이정 처리 1
+        /*Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "writeId");*/
+
+        WriteSearch writeSearch = WriteSearch.builder()
+                .page(1)
+                .build();
+
+
 
         //when
-        List<WriteResponse> writes = writeService.getList(pageable);
+        List<WriteResponse> writes = writeService.getList(writeSearch);
 
         //then
-        assertEquals(5L, writes.size());
-        assertEquals("글 제목 30" , writes.get(0).getTitle());
-        assertEquals("글 제목 26" , writes.get(4).getTitle());
-
+        assertEquals(10L, writes.size());
+        assertEquals("글 제목 19" , writes.get(0).getTitle());
 
     }
 }

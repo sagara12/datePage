@@ -134,7 +134,7 @@ class WriteControllerTest {
     }
 
     @Test
-    @DisplayName("글 여럭개 조회")
+    @DisplayName("글 여러개 조회 & 페이징 처리")
     void test5() throws Exception {
         //given
         //given
@@ -151,10 +151,10 @@ class WriteControllerTest {
 
         //expected
 
-        mockMvc.perform(get("/write?page=1&sort=writeId,desc") // /write?page=1&sort=writeId,desc&size=5
+        mockMvc.perform(get("/write?page=1&size=10") // /write?page=1&sort=writeId,desc&size=5
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(jsonPath("$.length()", Is.is(5)))
+                .andExpect(jsonPath("$.length()", Is.is(10)))
                 .andExpect(jsonPath("$.[0]write_id").value(30))
                 .andExpect(jsonPath("$.[0]title").value("글 제목 30"))
                 .andExpect(jsonPath("$.[0]content").value("글 내용 30"))
