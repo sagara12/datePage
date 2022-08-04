@@ -1,11 +1,10 @@
 package com.datePage.request.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.datePage.request.WriteEdit;
+import lombok.*;
 
 import javax.persistence.*;
+
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -29,4 +28,15 @@ public class Write {
         this.content = content;
     }
 
+    public WriteEditor.WriteEditorBuilder toEditor() {
+       return WriteEditor.builder()
+                .title(title)
+                .content(content);
+
+    }
+
+    public void edit(WriteEditor writeEditor) {
+        title = writeEditor.getTitle();
+        content = writeEditor.getContent();
+    }
 }

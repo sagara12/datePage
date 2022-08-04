@@ -3,6 +3,7 @@ package com.datePage.controller;
 import com.datePage.repository.DataBaseCleaner;
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteEdit;
 import com.datePage.request.domain.Write;
 import com.datePage.service.DataCleanUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -180,5 +180,33 @@ class WriteControllerTest {
         dataBaseCleaner.cleanWriteDBDataBase();
     }
 
+    @Test
+    @DisplayName("글 제목 수정")
+    void test6() throws Exception {
+
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+        WriteEdit writeEdit = WriteEdit.builder()
+                .title("글 제목 수정")
+                .content("글 내용 O")
+                .build();
+
+        //expected
+
+        mockMvc.perform(patch("/writes/{writeId}", write.getWriteId()) // PATCH /writes/{writeId}
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(writeEdit))
+                )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        dataBaseCleaner.cleanWriteDBDataBase();
+    }
 
 }

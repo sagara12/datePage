@@ -1,6 +1,7 @@
 package com.datePage.controller;
 
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteEdit;
 import com.datePage.request.WriteSearch;
 import com.datePage.response.WriteResponse;
 import com.datePage.service.WriteService;
@@ -23,6 +24,7 @@ public class WriteController {
 
     @PostMapping("/write")
     public Map post(@RequestBody @Valid WriteCreate request) {
+
         //post- > 200, 201
         //Case1. 저장한 데이터 Entity -> response로 응답하기
         //Case2. 저장한 데이터 primary_id -> response로 응답하기
@@ -60,5 +62,10 @@ public class WriteController {
     @GetMapping("/writes")
     public List<WriteResponse> getList(@ModelAttribute WriteSearch writeSearch) {
         return writeService.getList(writeSearch);
+    }
+
+    @PatchMapping("/writes/{writeId}")
+    public void edit(@PathVariable Long writeId, @RequestBody @Valid WriteEdit request){
+        writeService.edit(writeId, request);
     }
 }

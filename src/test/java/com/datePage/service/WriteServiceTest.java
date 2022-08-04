@@ -2,6 +2,7 @@ package com.datePage.service;
 
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteEdit;
 import com.datePage.request.WriteSearch;
 import com.datePage.request.domain.Write;
 import com.datePage.response.WriteResponse;
@@ -119,5 +120,56 @@ class WriteServiceTest {
         assertEquals(10L, writes.size());
         assertEquals("글 제목 19" , writes.get(0).getTitle());
 
+    }
+    @Test
+    @DisplayName("게시글 제목 수정")
+    void test4() {
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+        WriteEdit  writeEdit = WriteEdit.builder()
+                .title("글 제목 수정")
+                .content("글 내용 O")
+                .build();
+
+        //when
+        writeService.edit(write.getWriteId(), writeEdit);
+
+        //then
+        Write changedWrite = writeRepository.findById(write.getWriteId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id = " + write.getWriteId()));
+        Assertions.assertEquals("글 제목 수정", changedWrite.getTitle());
+        Assertions.assertEquals("글 내용 O", changedWrite.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 내용 수정")
+    void test5() {
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+        WriteEdit  writeEdit = WriteEdit.builder()
+                .title("글 제목 O")
+                .content("글 내용 수정")
+                .build();
+
+        //when
+        writeService.edit(write.getWriteId(), writeEdit);
+
+        //then
+        Write changedWrite = writeRepository.findById(write.getWriteId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id = " + write.getWriteId()));
+        Assertions.assertEquals("글 제목 O", changedWrite.getTitle());
+        Assertions.assertEquals("글 내용 수정", changedWrite.getContent());
     }
 }

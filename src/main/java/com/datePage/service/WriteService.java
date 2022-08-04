@@ -2,11 +2,14 @@ package com.datePage.service;
 
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
+import com.datePage.request.WriteEdit;
 import com.datePage.request.WriteSearch;
 import com.datePage.request.domain.Write;
+import com.datePage.request.domain.WriteEditor;
 import com.datePage.response.WriteResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,5 +70,19 @@ public class WriteService {
                 .collect(Collectors.toList());
 
         return collect;
+    }
+
+    @Transactional
+    public void edit(Long id, WriteEdit writeEdit) {
+        Write write = writeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        WriteEditor.WriteEditorBuilder writeEditorBuilder = write.toEditor();
+
+        WriteEditor writeEditor = writeEditorBuilder.title(writeEdit.getTitle())
+                .content(writeEdit.getContent())
+                .build();
+
+        write.edit(writeEditor);
     }
 }
