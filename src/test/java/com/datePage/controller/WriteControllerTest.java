@@ -8,7 +8,6 @@ import com.datePage.request.domain.Write;
 import com.datePage.service.DataCleanUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.Is;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -24,7 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -209,4 +206,28 @@ class WriteControllerTest {
         dataBaseCleaner.cleanWriteDBDataBase();
     }
 
+
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test7() throws Exception {
+
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+
+        //expected
+
+        mockMvc.perform(delete("/writes/{writeId}", write.getWriteId()) // PATCH /writes/{writeId}
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
 }

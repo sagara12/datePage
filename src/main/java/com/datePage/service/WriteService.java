@@ -85,4 +85,12 @@ public class WriteService {
 
         write.edit(writeEditor);
     }
+
+    public void delete(Long writeId) {
+        Write write = writeRepository.findById(writeId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        //존재하는 경우
+        writeRepository.delete(write);
+    }
 }

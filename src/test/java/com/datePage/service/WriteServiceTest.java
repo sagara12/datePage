@@ -172,4 +172,27 @@ class WriteServiceTest {
         Assertions.assertEquals("글 제목 O", changedWrite.getTitle());
         Assertions.assertEquals("글 내용 수정", changedWrite.getContent());
     }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test6() {
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+        WriteEdit  writeEdit = WriteEdit.builder()
+                .title("글 제목 O")
+                .content("글 내용 수정")
+                .build();
+
+        //when
+        writeService.delete(write.getWriteId());
+
+        //then
+       Assertions.assertEquals(0,writeRepository.count());
+    }
 }

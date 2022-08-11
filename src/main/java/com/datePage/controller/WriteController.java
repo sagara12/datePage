@@ -68,4 +68,9 @@ public class WriteController {
     public void edit(@PathVariable Long writeId, @RequestBody @Valid WriteEdit request){
         writeService.edit(writeId, request);
     }
+
+    @DeleteMapping("/writes/{writeId}")
+    public void delete(@PathVariable Long writeId){
+        writeService.delete(writeId);
+    }
 }
