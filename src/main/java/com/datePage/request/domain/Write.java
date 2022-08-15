@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Write {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long writeId;
 
