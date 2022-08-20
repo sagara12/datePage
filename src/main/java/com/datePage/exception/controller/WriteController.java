@@ -1,4 +1,4 @@
-package com.datePage.controller;
+package com.datePage.exception.controller;
 
 import com.datePage.request.WriteCreate;
 import com.datePage.request.WriteEdit;

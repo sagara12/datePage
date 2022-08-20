@@ -1,4 +1,4 @@
-package com.datePage.controller;
+package com.datePage.exception.controller;
 
 import com.datePage.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;

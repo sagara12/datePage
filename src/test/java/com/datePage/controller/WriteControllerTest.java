@@ -50,7 +50,7 @@ class WriteControllerTest {
     @BeforeEach
     void clean() {
         writeRepository.deleteAll();
-        //dataCleanUp.execute();
+        dataCleanUp.execute();
     }
 
 
