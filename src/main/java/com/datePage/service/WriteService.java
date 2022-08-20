@@ -1,5 +1,6 @@
 package com.datePage.service;
 
+import com.datePage.exception.WriteNotFound;
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
 import com.datePage.request.WriteEdit;
@@ -39,7 +40,7 @@ public class WriteService {
 
     public WriteResponse get(Long id) {
         Write write =   writeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글립니다"));
+                .orElseThrow(() -> new WriteNotFound());
 
          WriteResponse writeResponse = WriteResponse.builder()
                 .writeId(write.getWriteId())
@@ -75,7 +76,7 @@ public class WriteService {
     @Transactional
     public void edit(Long id, WriteEdit writeEdit) {
         Write write = writeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(() -> new WriteNotFound());
 
         WriteEditor.WriteEditorBuilder writeEditorBuilder = write.toEditor();
 
@@ -88,7 +89,7 @@ public class WriteService {
 
     public void delete(Long writeId) {
         Write write = writeRepository.findById(writeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(() -> new WriteNotFound());
 
         //존재하는 경우
         writeRepository.delete(write);

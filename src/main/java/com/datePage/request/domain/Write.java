@@ -1,7 +1,9 @@
 package com.datePage.request.domain;
 
-import com.datePage.request.WriteEdit;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 

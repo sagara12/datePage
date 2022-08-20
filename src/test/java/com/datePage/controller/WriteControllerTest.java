@@ -50,7 +50,7 @@ class WriteControllerTest {
     @BeforeEach
     void clean() {
         writeRepository.deleteAll();
-        dataCleanUp.execute();
+        //dataCleanUp.execute();
     }
 
 
@@ -168,7 +168,7 @@ class WriteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(jsonPath("$.length()", Is.is(10)))
-                .andExpect(jsonPath("$.[0]writeId").value(30))
+                                    .andExpect(jsonPath("$.[0]writeId").value(30))
                 .andExpect(jsonPath("$.[0]title").value("글 제목 30"))
                 .andExpect(jsonPath("$.[0]content").value("글 내용 30"))
                 .andExpect(status().isOk())
@@ -209,7 +209,7 @@ class WriteControllerTest {
 
 
     @Test
-    @DisplayName("글 제목 수정")
+    @DisplayName("글 제목 삭제")
     void test7() throws Exception {
 
         //given

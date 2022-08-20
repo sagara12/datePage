@@ -1,5 +1,6 @@
 package com.datePage.service;
 
+import com.datePage.exception.WriteNotFound;
 import com.datePage.repository.WriteRepository;
 import com.datePage.request.WriteCreate;
 import com.datePage.request.WriteEdit;
@@ -31,6 +32,7 @@ class WriteServiceTest {
 
     @BeforeEach
     void clean() {
+
         writeRepository.deleteAll();
     }
 
@@ -195,4 +197,69 @@ class WriteServiceTest {
         //then
        Assertions.assertEquals(0,writeRepository.count());
     }
+
+    @Test
+    @DisplayName("글 1개 조회")
+    void test7() {
+        //given
+        Write write = Write.builder()
+                .title("title11")
+                .content("content11")
+                .build();
+
+        writeRepository.save(write);
+
+
+        //post.getId() //primary_id = 1
+
+
+        Long writeId = 1L;
+
+        //expected
+         Assertions.assertThrows(WriteNotFound.class, () ->{
+            writeService.get(write.getWriteId() + 1L);
+        });
+
+
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지 않는 글")
+    void test8() {
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+        //expected
+        Assertions.assertThrows(WriteNotFound.class, () ->{
+            writeService.delete(write.getWriteId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("게시글 내용 수정 = 존재하지 않는 글")
+    void test9() {
+        //given
+        Write write = Write.builder()
+                .title("글 제목 O")
+                .content("글 내용 O")
+                .build();
+
+        writeRepository.save(write);
+
+        WriteEdit  writeEdit = WriteEdit.builder()
+                .title("글 제목 O")
+                .content("글 내용 수정")
+                .build();
+
+        //expected
+        Assertions.assertThrows(WriteNotFound.class, () ->{
+            writeService.edit(write.getWriteId() + 1L, writeEdit);
+        });
+    }
+
 }
