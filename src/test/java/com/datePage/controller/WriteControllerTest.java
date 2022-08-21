@@ -8,6 +8,7 @@ import com.datePage.request.domain.Write;
 import com.datePage.service.DataCleanUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.Is;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.datePage.request.domain.QWrite.write;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -121,6 +123,33 @@ class WriteControllerTest {
     }
 
     //DB에 test가 저장되는지 확인하는 테스트 작성
+    @Test
+    @DisplayName("/write 요청시 DB에 값이 저장된다.")
+    void test33() throws Exception {
+        //given
+        WriteCreate request = WriteCreate.builder()
+                .title("제목입니다")
+                .content("내용입니다")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        mockMvc.perform(post("/write")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+        //then
+        Assertions.assertEquals(1L, writeRepository.count());
+
+        Write write = writeRepository.findAll().get(0);
+        Assertions.assertEquals("제목입니다", write.getTitle());
+        Assertions.assertEquals("내용입니다", write.getContent());
+    }
+
 
     @Test
     @DisplayName("글 1개 조회")
@@ -230,4 +259,59 @@ class WriteControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
     }
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    void test9() throws Exception {
+        //expected
+        mockMvc.perform(delete("/writes/{writeId}", 1L) // PATCH /writes/{writeId}
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    void test10() throws Exception {
+        // given
+        WriteEdit writeEdit = WriteEdit.builder()
+                .title("글 제목 수정")
+                .content("글 내용 O")
+                .build();
+
+        // expected
+        mockMvc.perform(patch("/writes/{writeId}", 1L) // PATCH /writes/{writeId}
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(writeEdit))
+                )
+                .andExpect(status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+
+    }
+
+    @Test
+    @DisplayName("게시글 작성시 제목에 바보는 포함 할 수 없다.")
+    void test11() throws Exception {
+        //given
+        WriteCreate request = WriteCreate.builder()
+                .title("나는 바보입니다")
+                .content("내용입니다.")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        mockMvc.perform(post("/write")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+
 }

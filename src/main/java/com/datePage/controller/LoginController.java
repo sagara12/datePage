@@ -1,4 +1,4 @@
-package com.datePage.exception.controller;
+package com.datePage.controller;
 
 import com.datePage.request.PostCreate;
 import com.datePage.service.LoginService;

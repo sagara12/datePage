@@ -1,6 +1,8 @@
 package com.datePage.exception;
 
-public class WriteNotFound extends RuntimeException{
+
+// status :404
+public class WriteNotFound extends DatePageException{
 
     private static final String MESSAGE  = "존재하지 않는 글입니다.";
 
@@ -11,4 +13,9 @@ public class WriteNotFound extends RuntimeException{
     /*public WriteNotFound(Throwable cause) {
         super(MESSAGE, cause);
     }*/
+
+    @Override
+    public int statusCode() {
+        return 404;
+    }
 }

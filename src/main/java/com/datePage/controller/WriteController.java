@@ -1,5 +1,6 @@
-package com.datePage.exception.controller;
+package com.datePage.controller;
 
+import com.datePage.exception.InvalidRequest;
 import com.datePage.request.WriteCreate;
 import com.datePage.request.WriteEdit;
 import com.datePage.request.WriteSearch;
@@ -22,6 +23,8 @@ public class WriteController {
 
     @PostMapping("/write")
     public Map post(@RequestBody @Valid WriteCreate request) {
+
+        request.validate();
 
         //post- > 200, 201
         //Case1. 저장한 데이터 Entity -> response로 응답하기
