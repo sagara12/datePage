@@ -49,7 +49,7 @@ public class WriteControllerDocTest {
                 .build();
 
         writeRepository.save(write);
-
+        //expected
         this.mockMvc.perform(get("/write/{writeIndex}", 1L).accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
